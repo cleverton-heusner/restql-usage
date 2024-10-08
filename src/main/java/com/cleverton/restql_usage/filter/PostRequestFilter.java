@@ -1,15 +1,15 @@
 package com.cleverton.restql_usage.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.cleverton.heusner.selector.FieldsSelector;
 import jakarta.servlet.*;
-import org.cleverton.selector.FieldsSelector;
 import org.instancio.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static org.cleverton.selector.FieldsSelector.FIELDS;
+import static io.github.cleverton.heusner.selector.FieldsSelector.FIELDS;
 
 @Component
 public class PostRequestFilter implements Filter {
