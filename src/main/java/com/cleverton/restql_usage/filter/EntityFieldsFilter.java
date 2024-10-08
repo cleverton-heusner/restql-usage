@@ -1,8 +1,8 @@
 package com.cleverton.restql_usage.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cleverton.heusner.selector.FieldsSelector;
 import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.instancio.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,16 +12,10 @@ import java.io.IOException;
 import static io.github.cleverton.heusner.selector.FieldsSelector.FIELDS;
 
 @Component
-public class PostRequestFilter implements Filter {
-
-    @Autowired
-    private ObjectMapper objectMapper;
+public class EntityFieldsFilter implements Filter {
 
     @Autowired
     private FieldsSelector fieldsSelector;
-
-    @Autowired
-    private PojoMapper pojoMapper;
 
     @Override
     public void doFilter(final ServletRequest request,
@@ -30,14 +24,17 @@ public class PostRequestFilter implements Filter {
             throws IOException, ServletException {
 
         final String fields = request.getParameter(FIELDS);
+        final var responseWrapper = new ResponseWrapper(response);
+        chain.doFilter(request, responseWrapper);
 
-        if (!StringUtils.isBlank(fields)) {
-            final var responseWrapper = new CustomResponseWrapper(response);
-            chain.doFilter(request, responseWrapper);
-            final Object entity = pojoMapper.toPojo(responseWrapper.getContentAsString(), "@type");
-            final var selectedFields = fieldsSelector.from(entity).select(fields);
-
-            responseWrapper.overwriteContent(objectMapper.writeValueAsString(selectedFields));
+        if (((HttpServletRequest) request).getRequestURI().contains("/fields-selection-with-filter")) {
+            if (!StringUtils.isBlank(fields)) {
+                final var entityWithSelectedFields = fieldsSelector.from(responseWrapper.readEntity()).select(fields);
+                responseWrapper.writeEntityWithSelectedFields(entityWithSelectedFields);
+            }
+            else {
+                responseWrapper.writeEntityWithAllFields();
+            }
         }
         else {
             chain.doFilter(request, response);

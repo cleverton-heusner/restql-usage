@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
 public class Post {
 
     private long id;

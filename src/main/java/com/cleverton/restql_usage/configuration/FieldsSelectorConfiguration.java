@@ -1,6 +1,6 @@
 package com.cleverton.restql_usage.configuration;
 
-import org.cleverton.selector.FieldsSelector;
+import io.github.cleverton.heusner.selector.FieldsSelector;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -9,5 +9,4 @@ public class RestQlUsageApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RestQlUsageApplication.class, args);
 	}
-
 }
