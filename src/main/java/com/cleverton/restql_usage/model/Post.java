@@ -1,12 +1,12 @@
 package com.cleverton.restql_usage.model;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.github.cleverton.heusner.configuration.RestQl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
+@RestQl
 public class Post {
 
     private long id;

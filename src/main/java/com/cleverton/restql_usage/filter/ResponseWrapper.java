@@ -28,13 +28,9 @@ public class ResponseWrapper extends ContentCachingResponseWrapper {
     }
 
     public Object readEntity() {
-        return convertJsonToEntity(getJson());
-    }
-
-    private Object convertJsonToEntity(final String json) {
         try {
-            final JsonNode entityTree = objectMapper.readTree(json);
-            final String entityName = entityTree.get("@class").asText();
+            final JsonNode entityTree = objectMapper.readTree(getJson());
+            final String entityName = entityTree.get(CLAZZ).asText();
 
             return objectMapper.convertValue(entityTree, Class.forName(entityName));
         } catch (final JsonProcessingException | ClassNotFoundException e) {
@@ -53,7 +49,7 @@ public class ResponseWrapper extends ContentCachingResponseWrapper {
     public void writeEntityWithAllFields() {
         try {
             final JsonNode entityTree = objectMapper.readTree(getJson());
-            removeClassField(entityTree);
+            removeNodeFromTree(CLAZZ, entityTree);
             writeResponse(objectMapper.writeValueAsString(entityTree));
         } catch (final IOException e) {
             throw new ResponseProcessingException("Error writing entity with all fields", e);
@@ -64,15 +60,15 @@ public class ResponseWrapper extends ContentCachingResponseWrapper {
         return new String(getContentAsByteArray(), StandardCharsets.UTF_8);
     }
 
-    private void removeClassField(final JsonNode node) {
-        if (node.isObject()) {
-            if (node.has(CLAZZ)) {
-                ((ObjectNode) node).remove(CLAZZ);
+    private void removeNodeFromTree(final String nodeName, final JsonNode tree) {
+        if (tree.isObject()) {
+            if (tree.has(nodeName)) {
+                ((ObjectNode) tree).remove(nodeName);
             }
 
-            node.fields().forEachRemaining(entry -> removeClassField(entry.getValue()));
-        } else if (node.isArray()) {
-            node.forEach(this::removeClassField);
+            tree.fields().forEachRemaining(entry -> removeNodeFromTree(nodeName, entry.getValue()));
+        } else if (tree.isArray()) {
+            tree.forEach(t -> removeNodeFromTree(nodeName, t));
         }
     }
 

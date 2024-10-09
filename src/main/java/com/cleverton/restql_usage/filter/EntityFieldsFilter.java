@@ -1,5 +1,6 @@
 package com.cleverton.restql_usage.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cleverton.heusner.selector.FieldsSelector;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ public class EntityFieldsFilter implements Filter {
     @Autowired
     private FieldsSelector fieldsSelector;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
@@ -24,7 +28,7 @@ public class EntityFieldsFilter implements Filter {
             throws IOException, ServletException {
 
         final String fields = request.getParameter(FIELDS);
-        final var responseWrapper = new ResponseWrapper(response);
+        final var responseWrapper = new ResponseWrapper(response, objectMapper);
         chain.doFilter(request, responseWrapper);
 
         if (((HttpServletRequest) request).getRequestURI().contains("/fields-selection-with-filter")) {
