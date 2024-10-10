@@ -3,7 +3,7 @@ package com.cleverton.restql_usage.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
-import io.github.cleverton.heusner.configuration.RestQlTypeResolverBuilder;
+import io.github.cleverton.heusner.restql.RestQlTypeResolverBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

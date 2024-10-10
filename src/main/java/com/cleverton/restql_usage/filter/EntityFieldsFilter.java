@@ -1,11 +1,11 @@
 package com.cleverton.restql_usage.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.cleverton.heusner.restql.RestQlResponseWrapper;
 import io.github.cleverton.heusner.selector.FieldsSelector;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.instancio.internal.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,11 +15,13 @@ import static io.github.cleverton.heusner.selector.FieldsSelector.FIELDS;
 @Component
 public class EntityFieldsFilter implements Filter {
 
-    @Autowired
-    private FieldsSelector fieldsSelector;
+    private final FieldsSelector fieldsSelector;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    public EntityFieldsFilter(final FieldsSelector fieldsSelector, final ObjectMapper objectMapper) {
+        this.fieldsSelector = fieldsSelector;
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void doFilter(final ServletRequest request,
@@ -28,16 +30,16 @@ public class EntityFieldsFilter implements Filter {
             throws IOException, ServletException {
 
         final String fields = request.getParameter(FIELDS);
-        final var responseWrapper = new ResponseWrapper(response, objectMapper);
-        chain.doFilter(request, responseWrapper);
+        final var restQlResponseWrapper = new RestQlResponseWrapper(response, objectMapper);
+        chain.doFilter(request, restQlResponseWrapper);
 
         if (((HttpServletRequest) request).getRequestURI().contains("/fields-selection-with-filter")) {
             if (!StringUtils.isBlank(fields)) {
-                final var entityWithSelectedFields = fieldsSelector.from(responseWrapper.readEntity()).select(fields);
-                responseWrapper.writeEntityWithSelectedFields(entityWithSelectedFields);
+                final var entityWithSelectedFields = fieldsSelector.from(restQlResponseWrapper.readEntity()).select(fields);
+                restQlResponseWrapper.writeEntityWithSelectedFields(entityWithSelectedFields);
             }
             else {
-                responseWrapper.writeEntityWithAllFields();
+                restQlResponseWrapper.writeEntityWithAllFields();
             }
         }
         else {

@@ -69,6 +69,12 @@
 			<artifactId>restql</artifactId>
 			<version>${restql.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.github.cleverton-heusner</groupId>
+			<artifactId>restql-spring-boot</artifactId>
+			<version>${restql.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

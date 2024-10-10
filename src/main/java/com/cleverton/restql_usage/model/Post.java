@@ -1,6 +1,6 @@
 package com.cleverton.restql_usage.model;
 
-import io.github.cleverton.heusner.configuration.RestQl;
+import io.github.cleverton.heusner.restql.RestQl;
 
 import java.util.ArrayList;
 import java.util.Date;
