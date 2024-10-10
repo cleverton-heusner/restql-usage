@@ -1,7 +1,7 @@
 package com.cleverton.restql_usage.controller;
 
 import com.cleverton.restql_usage.model.Post;
-import io.github.cleverton.heusner.selector.FieldsSelector;
+import io.github.cleverton.heusner.query.RestQlQuery;
 import org.instancio.Instancio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class PostController {
 
     @Autowired
-    private FieldsSelector fieldsSelector;
+    private RestQlQuery restQlQuery;
 
     @GetMapping("/post/fields-selection-with-filter")
     public ResponseEntity<Post> getPostWithFieldsSelectedByFilter(
@@ -28,6 +28,6 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> getPostWithFieldsSelectedManually(
             @RequestParam(name = "fields", required = false) final String fields
     ) {
-        return ResponseEntity.ok(fieldsSelector.from(Instancio.create(Post.class)).select(fields));
+        return ResponseEntity.ok(restQlQuery.select(fields).from(Instancio.create(Post.class)));
     }
 }

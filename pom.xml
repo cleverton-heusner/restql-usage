@@ -32,7 +32,8 @@
 		<instancio.junit.version>5.0.1</instancio.junit.version>
 		<jackson.version>2.17.2</jackson.version>
 		<gson.version>2.8.9</gson.version>
-		<restql.version>1.0.0</restql.version>
+		<restql.core.version>1.0.2</restql.core.version>
+		<restql.spring.boot.version>1.0.0</restql.spring.boot.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -66,14 +67,14 @@
 
 		<dependency>
 			<groupId>io.github.cleverton-heusner</groupId>
-			<artifactId>restql</artifactId>
-			<version>${restql.version}</version>
+			<artifactId>restql-core</artifactId>
+			<version>${restql.core.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.github.cleverton-heusner</groupId>
 			<artifactId>restql-spring-boot</artifactId>
-			<version>${restql.version}</version>
+			<version>${restql.spring.boot.version}</version>
 		</dependency>
 	</dependencies>
 

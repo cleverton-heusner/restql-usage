@@ -1,8 +1,8 @@
 package com.cleverton.restql_usage.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.cleverton.heusner.query.RestQlQuery;
 import io.github.cleverton.heusner.restql.RestQlResponseWrapper;
-import io.github.cleverton.heusner.selector.FieldsSelector;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.instancio.internal.util.StringUtils;
@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static io.github.cleverton.heusner.selector.FieldsSelector.FIELDS;
+import static io.github.cleverton.heusner.query.RestQlQuery.FIELDS;
 
 @Component
 public class EntityFieldsFilter implements Filter {
 
-    private final FieldsSelector fieldsSelector;
+    private final RestQlQuery restQlQuery;
     private final ObjectMapper objectMapper;
 
-    public EntityFieldsFilter(final FieldsSelector fieldsSelector, final ObjectMapper objectMapper) {
-        this.fieldsSelector = fieldsSelector;
+    public EntityFieldsFilter(final RestQlQuery restQlQuery, final ObjectMapper objectMapper) {
+        this.restQlQuery = restQlQuery;
         this.objectMapper = objectMapper;
     }
 
@@ -35,7 +35,7 @@ public class EntityFieldsFilter implements Filter {
 
         if (((HttpServletRequest) request).getRequestURI().contains("/fields-selection-with-filter")) {
             if (!StringUtils.isBlank(fields)) {
-                final var entityWithSelectedFields = fieldsSelector.from(restQlResponseWrapper.readEntity()).select(fields);
+                final var entityWithSelectedFields = restQlQuery.select(fields).from(restQlResponseWrapper.readEntity());
                 restQlResponseWrapper.writeEntityWithSelectedFields(entityWithSelectedFields);
             }
             else {

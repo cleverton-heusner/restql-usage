@@ -1,6 +1,6 @@
 package com.cleverton.restql_usage.configuration;
 
-import io.github.cleverton.heusner.selector.FieldsSelector;
+import io.github.cleverton.heusner.query.RestQlQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class FieldsSelectorConfiguration {
 
     @Bean
-    public FieldsSelector fieldsSelector() {
-        return new FieldsSelector();
+    public RestQlQuery restQlQuery() {
+        return new RestQlQuery();
     }
 }
